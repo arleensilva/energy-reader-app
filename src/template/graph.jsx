@@ -32,7 +32,6 @@ export default props => {
 
   const renderGraph = () => {
     let data =  props.data;
-    debugger
 
     if(data && data.length > 0) {
       return (
@@ -50,7 +49,10 @@ export default props => {
       )      
     } else {
       return (
-        <p>There's no data for graph</p>
+        <div>
+          <i className='fa fa-spinner fa-pulse fa-3x fa-fw'></i>
+          <p>There's no data for graph</p>
+        </div>
       )
     }
     

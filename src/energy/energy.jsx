@@ -22,7 +22,7 @@ export default class Energy extends Component {
             {name: 'Teste D', value: 295, pv: 1800, amt: 1800},
             {name: 'Teste E', value: 275, pv: 1800, amt: 1800},
         ];
-        debugger
+        
         this.setState({...this.state, data: teste})
     }
     
