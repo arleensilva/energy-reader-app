@@ -1,8 +1,7 @@
 import React from 'react'
-import PageHeader from '../template/pageHeader'
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ReferenceLine, Legend } from 'recharts';
 
-let data = [{name: 'Teste A', value: 400, pv: 2400, amt: 2400}, 
+let dataTest = [{name: 'Teste A', value: 400, pv: 2400, amt: 2400}, 
     {name: 'Teste B', value: 200, pv: 1200, amt: 1200},
     {name: 'Teste C', value: 370, pv: 1800, amt: 1800},
     {name: 'Teste D', value: 295, pv: 1800, amt: 1800},
@@ -29,19 +28,38 @@ const CustomizedDot = (props) => {
     );
   };
 
-export default props => (
-    <div>
-        <PageHeader name='Energy' small='Reader'/>
-        
-        <LineChart width={500} height={300} data={data} margin={{ top: 5, right: 20, bottom: 5, left: 0 }} >
-            <Line type='monotone' dataKey='value' stroke='#8884d8' activeDot={{r: 8}} dot={<CustomizedDot />} id='value' />
-            <CartesianGrid stroke='#ccc' strokeDasharray="3 3" />
-            <XAxis dataKey='name' padding={{ left: 15, right: 15 }} />
-            <YAxis domain={[0, 'dataMax + 50']}/>
-            <Tooltip />
-            <ReferenceLine y={350} label="Max" stroke="red" />
-            <Legend />
-        </LineChart>
+export default props => {
 
+  const renderGraph = () => {
+    let data =  props.data;
+    debugger
+
+    if(data && data.length > 0) {
+      return (
+        <div>        
+          <LineChart width={500} height={300} data={data} margin={{ top: 5, right: 20, bottom: 5, left: 0 }} >
+              <Line type='monotone' dataKey='value' stroke='#8884d8' activeDot={{r: 8}} dot={<CustomizedDot />} id='value' />
+              <CartesianGrid stroke='#ccc' strokeDasharray="3 3" />
+              <XAxis dataKey='name' padding={{ left: 15, right: 15 }} />
+              <YAxis domain={[0, 'dataMax + 50']}/>
+              <Tooltip />
+              <ReferenceLine y={350} label="Max" stroke="red" />
+              <Legend />
+          </LineChart>
+        </div>
+      )      
+    } else {
+      return (
+        <p>There's no data for graph</p>
+      )
+    }
+    
+  }
+
+  return (
+    <div>
+      {renderGraph()}
     </div>
-)
+  )
+
+}
