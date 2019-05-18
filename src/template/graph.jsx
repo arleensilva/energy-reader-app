@@ -36,11 +36,11 @@ export default props => {
     if(data && data.length > 0) {
       return (
         <div>        
-          <LineChart width={500} height={300} data={data} margin={{ top: 5, right: 20, bottom: 5, left: 0 }} >
+          <LineChart width={600} height={300} data={data} margin={{ top: 5, right: 20, bottom: 5, left: 0 }} >
               <Line type='monotone' dataKey='value' stroke='#8884d8' activeDot={{r: 8}} dot={<CustomizedDot />} id='value' />
               <CartesianGrid stroke='#ccc' strokeDasharray="3 3" />
               <XAxis dataKey='name' padding={{ left: 15, right: 15 }} />
-              <YAxis domain={[0, 'dataMax + 50']}/>
+              <YAxis domain={[0, 'dataMax + 1']}/>
               <Tooltip />
               <ReferenceLine y={350} label="Max" stroke="red" />
               <Legend />
