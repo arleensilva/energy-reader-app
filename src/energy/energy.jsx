@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import moment from 'moment'
 
 import Firebase from 'firebase';
 import firebaseConfig from '../utils/firebaseConfig'
@@ -8,53 +9,67 @@ import firebaseConfig from '../utils/firebaseConfig'
 import PageHeader from '../template/pageHeader'
 import Graph from '../template/graph'
 
+import EnergyForm from './energyForm'
+
 export default class Energy extends Component {
     constructor(props){
         super(props)
         if (!Firebase.apps.length)
-            Firebase.initializeApp(firebaseConfig)
-        this.state = { data: [] , sensorValue: 1.2, maxValue: 0}
+            Firebase.initializeApp(firebaseConfig);
+        this.state = { data: [] , sensorValue: 0, maxValue: ''};
 
-        this.getData = this.getData.bind(this)
-    }
+        this.getData = this.getData.bind(this);
+        this.getMaxValue = this.getMaxValue.bind(this);
 
-    componentDidMount(){
-        this.refresh()
+        this.refresh();
     }
     
     refresh(){
-        let teste = [{name: 'Teste A', value: 400, pv: 2400, amt: 2400}, 
-            {name: 'Teste B', value: 200, pv: 1200, amt: 1200},
-            {name: 'Teste C', value: 370, pv: 1800, amt: 1800},
-            {name: 'Teste D', value: 295, pv: 1800, amt: 1800},
-            {name: 'Teste E', value: 275, pv: 1800, amt: 1800},
-        ];
 
-        let a =this.getData()
+        this.getData()
+        this.getMaxValue()
         
-        //this.setState({...this.state, data: teste})
+        //this.setState({...this.state, data, maxValue})
     }
 
 
     getData(){
-        let ref = Firebase.database().ref('/potenciometro').limitToLast(10);
+        let ref = Firebase.database().ref('/data').limitToLast(10);
         ref.on('value', snapshot => {
             const state = snapshot.val();
-            let stateValue = Object.keys(state).map(key =>  ({value: state[key]}))
-            this.setState({...this.state, data: stateValue})
+            let stateValue = [];
+            Object.keys(state).map(key =>  {
+                let item = state[key]
+                let dateString = `${item.day}/${item.month}/${item.year}`
+                stateValue.push({
+                    kW: item.value,
+                    date: moment(dateString, 'DD/MM/YYYY').format('DD/MM/YYYY')
+                })
+            })
+                this.setState({...this.state, data: stateValue});
+            return stateValue;
             
         });
         console.log('DATA RETRIEVED');
     }
 
-    
+    getMaxValue(){
+        let ref = Firebase.database().ref('/maxValue');
+        ref.on('value', snapshot => {
+            let maxValue = snapshot.val();
+            console.log(maxValue)
+                this.setState({...this.state, maxValue})
+            return maxValue
+        });
+        console.log('MAXVALUE RETRIEVED');
+    }
 
     render() {
         return (
             <div>
                 <PageHeader name='Energy' small='Reader'/>
-                <p>Teste {this.state.sensorValue}</p>
-                <Graph data={this.state.data} />                
+                <EnergyForm maxValue={ this.state.maxValue }/>
+                <Graph data={this.state.data} maxValue={this.state.maxValue}/>                
             </div>
         )
     }
