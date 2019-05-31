@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { PureComponent } from 'react'
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ReferenceLine, Legend } from 'recharts';
 
 const CustomizedDot = (props) => {
@@ -22,6 +22,20 @@ const CustomizedDot = (props) => {
   
   };
 
+class CustomizedAxisTick extends PureComponent {
+  render() {
+    const {
+      x, y, stroke, payload,
+    } = this.props;
+
+    return (
+      <g transform={`translate(${x},${y})`}>
+        <text x={0} y={0} dy={16} textAnchor="end" fill="#666" transform="rotate(-35)">{payload.value}</text>
+      </g>
+    );
+  }
+}
+
 export default props => {
 
   const renderGraph = () => {
@@ -33,10 +47,10 @@ export default props => {
           <LineChart width={600} height={300} data={data} margin={{ top: 5, right: 20, bottom: 5, left: 0 }} >
               <Line type='monotone' dataKey='kW' stroke='#8884d8' activeDot={{r: 8}} dot={<CustomizedDot maxValue={(props.maxValue > 0) ? props.maxValue : undefined } />} id='value' />
               <CartesianGrid stroke='#ccc' strokeDasharray="3 3" />
-              <XAxis dataKey='date' height={60} padding={{ left: 15, right: 15 }} />
+              <XAxis dataKey='date' height={60} padding={{ left: 15, right: 15 }} tick={<CustomizedAxisTick />} />
               <YAxis domain={[0, dataMax => (Math.ceil(dataMax) + 25)]}/>
               <Tooltip />
-              <ReferenceLine y={ props.maxValue > 0 ? props.maxValue : undefined } label="Max" stroke="red" />
+              <ReferenceLine y={ props.maxValue > 0 ? props.maxValue : undefined } label="kW/h Max" stroke="red" />
               <Legend />
           </LineChart>
         </div>
