@@ -33,8 +33,8 @@ export default props => {
           <LineChart width={600} height={300} data={data} margin={{ top: 5, right: 20, bottom: 5, left: 0 }} >
               <Line type='monotone' dataKey='kW' stroke='#8884d8' activeDot={{r: 8}} dot={<CustomizedDot maxValue={(props.maxValue > 0) ? props.maxValue : undefined } />} id='value' />
               <CartesianGrid stroke='#ccc' strokeDasharray="3 3" />
-              <XAxis dataKey='date' padding={{ left: 15, right: 15 }} />
-              <YAxis domain={[0, 'dataMax + 1']}/>
+              <XAxis dataKey='date' height={60} padding={{ left: 15, right: 15 }} />
+              <YAxis domain={[0, dataMax => (Math.ceil(dataMax) + 25)]}/>
               <Tooltip />
               <ReferenceLine y={ props.maxValue > 0 ? props.maxValue : undefined } label="Max" stroke="red" />
               <Legend />

@@ -20,6 +20,8 @@ export default class Energy extends Component {
 
         this.getData = this.getData.bind(this);
         this.getMaxValue = this.getMaxValue.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleClear = this.handleClear.bind(this);
 
         this.refresh();
     }
@@ -29,7 +31,14 @@ export default class Energy extends Component {
         this.getData()
         this.getMaxValue()
         
-        //this.setState({...this.state, data, maxValue})
+    }
+
+    handleChange(e){
+        this.setState({...this.state,  maxValue: e.target.value })
+    }
+
+    handleClear(e){
+        this.setState({...this.state, maxValue: 0})
     }
 
 
@@ -68,7 +77,9 @@ export default class Energy extends Component {
         return (
             <div>
                 <PageHeader name='Energy' small='Reader'/>
-                <EnergyForm maxValue={ this.state.maxValue }/>
+                <EnergyForm maxValue={ this.state.maxValue }
+                    handleChange={this.handleChange}
+                    handleClear={this.handleClear} />
                 <Graph data={this.state.data} maxValue={this.state.maxValue}/>                
             </div>
         )
