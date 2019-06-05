@@ -49,6 +49,7 @@ export default props => {
 
   const renderGraph = () => {
     let data =  props.data;
+    let topValue = props.topValue;
 
     if(data && data.length > 0) {
       return (
@@ -57,7 +58,7 @@ export default props => {
               <Line type='monotone' dataKey='kW' stroke='#8884d8' activeDot={{r: 8}} dot={<CustomizedDot maxValue={(props.maxValue > 0) ? props.maxValue : undefined } />} id='value' />
               <CartesianGrid stroke='#ccc' strokeDasharray="3 3" />
               <XAxis dataKey='date' height={60} padding={{ left: 15, right: 15 }} tick={<CustomizedAxisTick />} />
-              <YAxis domain={[0, dataMax => (Math.ceil(dataMax) + 25)]}/>
+              <YAxis domain={[0, dataMax => (Math.ceil(dataMax) + topValue)]}/>
               <Tooltip />
               <ReferenceLine y={ props.maxValue > 0 ? props.maxValue : undefined } label="kW/h Max" stroke="red" />
               <Legend />

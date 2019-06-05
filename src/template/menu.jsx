@@ -8,6 +8,13 @@ export default props => (
                     <i className="fa fa-lightbulb-o" /> EnergyReaderApp
                 </a>
             </div>
+
+            <div id='navbar' className='navbar-collapse collapse'>
+                <ul className='nav navbar-nav'>
+                    <li><a href='#/about'>Sobre</a></li>
+                </ul>
+            </div>
+
         </div>
     </nav>
 )

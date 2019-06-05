@@ -8,6 +8,7 @@ import Energy from '../energy/energy'
 export default props => (
     <Router history={hashHistory}>
         <Route path='/energygraph' component={Energy} />
+        <Route path='/about' component={About} />
         <Redirect from='*' to='/energygraph' />
     </Router>
 )

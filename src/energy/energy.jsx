@@ -17,22 +17,16 @@ export default class Energy extends Component {
         super(props)
         if (!Firebase.apps.length)
             Firebase.initializeApp(firebaseConfig);
-        this.state = { data: [] , sensorValue: 0, maxValue: '', daysLimit: 10 };
+        this.state = { data: [] , sensorValue: 0, maxValue: '', daysLimit: 10, topValue: 0 };
 
         this.getData = this.getData.bind(this);
-        this.getMaxValue = this.getMaxValue.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleClear = this.handleClear.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
-
-        this.refresh();
     }
-    
-    refresh(){
 
+    componentDidMount(){
         this.getData()
-        this.getMaxValue()
-        
     }
 
     handleChange(e){
@@ -56,6 +50,7 @@ export default class Energy extends Component {
         ref.on('value', snapshot => {
             const state = snapshot.val();
             let stateValue = [];
+            let topValue = limit > 30 ? 500 : 25
 
             Object.keys(state).map(key =>  {
                 let item = state[key]
@@ -84,22 +79,13 @@ export default class Energy extends Component {
                 }
 
             })
-            this.setState({...this.state, data: stateValue });
+
+            
+            this.setState({...this.state, data: stateValue, topValue });
             return stateValue;
             
         });
         console.log('DATA RETRIEVED');
-    }
-
-    getMaxValue(){
-        let ref = Firebase.database().ref('/maxValue');
-        ref.on('value', snapshot => {
-            let maxValue = snapshot.val();
-            console.log(maxValue)
-                this.setState({...this.state, maxValue})
-            return maxValue
-        });
-        console.log('MAXVALUE RETRIEVED');
     }
 
     render() {
@@ -112,7 +98,10 @@ export default class Energy extends Component {
                 <EnergyForm maxValue={ this.state.maxValue }
                     handleChange={this.handleChange}
                     handleClear={this.handleClear} />
-                <Graph data={this.state.data} maxValue={this.state.maxValue}/>                
+                <Graph 
+                    data={this.state.data} 
+                    maxValue={this.state.maxValue}
+                    topValue={this.state.topValue} />                
             </div>
         )
     }
