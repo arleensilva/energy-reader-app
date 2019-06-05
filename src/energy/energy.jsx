@@ -56,15 +56,35 @@ export default class Energy extends Component {
         ref.on('value', snapshot => {
             const state = snapshot.val();
             let stateValue = [];
+
             Object.keys(state).map(key =>  {
                 let item = state[key]
-                let dateString = `${item.day}/${item.month}/${item.year}`
-                stateValue.push({
-                    kW: item.value,
-                    date: moment(dateString, 'DD/MM/YYYY').format('DD/MM/YYYY')
-                })
+
+                if(limit > 30){
+                    let dateMonthString = `${item.month}/${item.year}`
+                    dateMonthString = moment(dateMonthString, 'MM/YYYY').format('MM/YYYY');
+                    
+                    let monthIndex = stateValue.findIndex(element => element.date == dateMonthString);
+
+                    if (monthIndex >= 0){
+                        stateValue[monthIndex].kW += item.value
+                    } else {
+                        stateValue.push({
+                            kW: item.value,
+                            date: dateMonthString
+                        })
+                    }
+
+                } else {
+                    let dateString = `${item.day}/${item.month}/${item.year}`
+                    stateValue.push({
+                        kW: item.value,
+                        date: moment(dateString, 'DD/MM/YYYY').format('DD/MM/YYYY')
+                    })
+                }
+
             })
-                this.setState({...this.state, data: stateValue });
+            this.setState({...this.state, data: stateValue });
             return stateValue;
             
         });
