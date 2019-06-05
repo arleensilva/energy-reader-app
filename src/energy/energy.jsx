@@ -10,18 +10,20 @@ import PageHeader from '../template/pageHeader'
 import Graph from '../template/graph'
 
 import EnergyForm from './energyForm'
+import EnergySelect from './energySelect'
 
 export default class Energy extends Component {
     constructor(props){
         super(props)
         if (!Firebase.apps.length)
             Firebase.initializeApp(firebaseConfig);
-        this.state = { data: [] , sensorValue: 0, maxValue: ''};
+        this.state = { data: [] , sensorValue: 0, maxValue: '', daysLimit: 10 };
 
         this.getData = this.getData.bind(this);
         this.getMaxValue = this.getMaxValue.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleClear = this.handleClear.bind(this);
+        this.handleSelect = this.handleSelect.bind(this);
 
         this.refresh();
     }
@@ -41,9 +43,16 @@ export default class Energy extends Component {
         this.setState({...this.state, maxValue: 0})
     }
 
+    handleSelect(e){
+        this.setState({...this.state,  daysLimit: parseInt(e.value) }, this.getData)
+        
+    }
+
 
     getData(){
-        let ref = Firebase.database().ref('/data').limitToLast(10);
+        let limit = 10;
+        limit = this.state.daysLimit > 0 ? this.state.daysLimit : 10;
+        let ref = Firebase.database().ref('/data').limitToLast(limit);
         ref.on('value', snapshot => {
             const state = snapshot.val();
             let stateValue = [];
@@ -55,7 +64,7 @@ export default class Energy extends Component {
                     date: moment(dateString, 'DD/MM/YYYY').format('DD/MM/YYYY')
                 })
             })
-                this.setState({...this.state, data: stateValue});
+                this.setState({...this.state, data: stateValue });
             return stateValue;
             
         });
@@ -77,6 +86,9 @@ export default class Energy extends Component {
         return (
             <div>
                 <PageHeader name='Energy' small='Reader'/>
+                <EnergySelect 
+                    daysLimit={this.state.daysLimit} 
+                    handleSelect={this.handleSelect} />
                 <EnergyForm maxValue={ this.state.maxValue }
                     handleChange={this.handleChange}
                     handleClear={this.handleClear} />
