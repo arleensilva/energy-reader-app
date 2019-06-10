@@ -120,7 +120,7 @@ export default class Energy extends Component {
                     handleClear={this.handleClear} 
                     placeholder='Valor máximo' 
                     typeForm='number' />
-                <EnergyForm maxValue={this.state.sensorValue /1000 + ' kW' }
+                <EnergyForm maxValue={parseFloat(this.state.sensorValue /1000).toFixed(2) + ' kW' }
                     disabled={true} 
                     placeholder='Valor da potência'/>
                 <Graph 
