@@ -4,15 +4,9 @@ export default props => (
     <nav className='navbar navbar-inverse bg-inverse'>
         <div className='container'>
             <div className='navbar-header'>
-                <a className='navbar-brand' href='#'>
+                <p className='navbar-brand' href='#'>
                     <i className="fa fa-lightbulb-o" /> EnergyReaderApp
-                </a>
-            </div>
-
-            <div id='navbar' className='navbar-collapse collapse'>
-                <ul className='nav navbar-nav'>
-                    <li><a href='#/about'>Sobre</a></li>
-                </ul>
+                </p>
             </div>
 
         </div>

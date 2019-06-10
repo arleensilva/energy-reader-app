@@ -18,6 +18,7 @@ export default props => {
                     placeholder='Valor máximo'
                     onChange={props.handleChange}
                     value={props.maxValue > 0 ? props.maxValue : ''}
+                    disabled={props.disabled}
                     />
             </Grid>
         </div>

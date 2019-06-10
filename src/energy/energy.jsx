@@ -17,16 +17,19 @@ export default class Energy extends Component {
         super(props)
         if (!Firebase.apps.length)
             Firebase.initializeApp(firebaseConfig);
-        this.state = { data: [] , sensorValue: 0, maxValue: '', daysLimit: 10, topValue: 0 };
+        this.state = { data: [] , sensorValue: 0, maxValue: '', daysLimit: 10, topValue: 0, sensorValue: 0 };
 
         this.getData = this.getData.bind(this);
+        this.getSensorValue = this.getSensorValue.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleClear = this.handleClear.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
     }
 
     componentDidMount(){
+        this.getSensorValue()
         this.getData()
+        
     }
 
     handleChange(e){
@@ -50,7 +53,7 @@ export default class Energy extends Component {
         ref.on('value', snapshot => {
             const state = snapshot.val();
             let stateValue = [];
-            let topValue = limit > 30 ? 50 : 5
+            let topValue = limit > 30 ? 50 : 0
 
             Object.keys(state).map(key =>  {
                 let item = state[key]
@@ -83,10 +86,21 @@ export default class Energy extends Component {
 
             
             this.setState({...this.state, data: stateValue, topValue });
-            return stateValue;
+            // return stateValue;
             
         });
         console.log('DATA RETRIEVED');
+    }
+
+    getSensorValue(){
+        let ref = Firebase.database().ref('/sensorValue');
+        ref.on('value', snapshot => {
+            const sensorValue = snapshot.val();            
+            this.setState({...this.state, sensorValue});
+            // return sensorValue;
+            
+        });
+        console.log('SENSOR VALUE RETRIEVED');
     }
 
     render() {
@@ -99,6 +113,8 @@ export default class Energy extends Component {
                 <EnergyForm maxValue={ this.state.maxValue }
                     handleChange={this.handleChange}
                     handleClear={this.handleClear} />
+                <EnergyForm maxValue={ this.state.sensorValue }
+                    disabled={true} />
                 <Graph 
                     data={this.state.data} 
                     maxValue={this.state.maxValue}
