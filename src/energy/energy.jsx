@@ -50,7 +50,7 @@ export default class Energy extends Component {
         ref.on('value', snapshot => {
             const state = snapshot.val();
             let stateValue = [];
-            let topValue = limit > 30 ? 500 : 25
+            let topValue = limit > 30 ? 50 : 5
 
             Object.keys(state).map(key =>  {
                 let item = state[key]
@@ -62,7 +62,8 @@ export default class Energy extends Component {
                     let monthIndex = stateValue.findIndex(element => element.date == dateMonthString);
 
                     if (monthIndex >= 0){
-                        stateValue[monthIndex].kW += item.value
+                        stateValue[monthIndex].kW += (item.value/1000)
+                        stateValue[monthIndex].kW = parseFloat(stateValue[monthIndex].kW).toFixed(2)
                     } else {
                         stateValue.push({
                             kW: item.value,
@@ -73,7 +74,7 @@ export default class Energy extends Component {
                 } else {
                     let dateString = `${item.day}/${item.month}/${item.year}`
                     stateValue.push({
-                        kW: item.value,
+                        kW: (item.value/1000).toFixed(2),
                         date: moment(dateString, 'DD/MM/YYYY').format('DD/MM/YYYY')
                     })
                 }
