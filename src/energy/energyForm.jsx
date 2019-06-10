@@ -14,10 +14,10 @@ export default props => {
     return (
         <div role='form' className='todoForm'>
             <Grid cols='12 5 4'>
-                <input id='description' className='form-control' type='number'
-                    placeholder='Valor máximo'
+                <input id='description' className='form-control' type={props.typeForm}
+                    placeholder={props.placeholder}
                     onChange={props.handleChange}
-                    value={props.maxValue > 0 ? props.maxValue : ''}
+                    value={props.maxValue}
                     disabled={props.disabled}
                     />
             </Grid>

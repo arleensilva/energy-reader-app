@@ -17,7 +17,12 @@ export default class Energy extends Component {
         super(props)
         if (!Firebase.apps.length)
             Firebase.initializeApp(firebaseConfig);
-        this.state = { data: [] , sensorValue: 0, maxValue: '', daysLimit: 10, topValue: 0, sensorValue: 0 };
+        this.state = { data: [], 
+            sensorValue: 0, 
+            maxValue: '', 
+            daysLimit: 10, 
+            topValue: 0, 
+            sensorValue: 0 };
 
         this.getData = this.getData.bind(this);
         this.getSensorValue = this.getSensorValue.bind(this);
@@ -112,9 +117,12 @@ export default class Energy extends Component {
                     handleSelect={this.handleSelect} />
                 <EnergyForm maxValue={ this.state.maxValue }
                     handleChange={this.handleChange}
-                    handleClear={this.handleClear} />
-                <EnergyForm maxValue={ this.state.sensorValue }
-                    disabled={true} />
+                    handleClear={this.handleClear} 
+                    placeholder='Valor máximo' 
+                    typeForm='number' />
+                <EnergyForm maxValue={this.state.sensorValue /1000 + ' kW' }
+                    disabled={true} 
+                    placeholder='Valor da potência'/>
                 <Graph 
                     data={this.state.data} 
                     maxValue={this.state.maxValue}
